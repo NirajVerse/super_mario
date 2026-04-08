@@ -1,22 +1,22 @@
 import os, sys, time, traceback
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-print("🔵 Starting imports...")
+print("Starting imports...")
 
 try:
     import cv2
-    print("✅ cv2")
+    print("cv2")
     import mediapipe as mp
-    print("✅ mediapipe")
+    print("mediapipe")
     import pyautogui
     pyautogui.FAILSAFE = False
-    print("✅ pyautogui")
+    print("pyautogui")
 except Exception as e:
-    print(f"❌ Import failed: {e}")
+    print(f"Import failed: {e}")
     traceback.print_exc()
     sys.exit(1)
 
-print("🔵 Setting up MediaPipe hands...")
+print("Setting up MediaPipe hands...")
 mp_hands = mp.solutions.hands
 mp_draw  = mp.solutions.drawing_utils
 hands    = mp_hands.Hands(
@@ -24,17 +24,17 @@ hands    = mp_hands.Hands(
     min_detection_confidence=0.7,
     min_tracking_confidence=0.7
 )
-print("✅ Hands ready")
+print("Hands ready")
 
-print("🔵 Setting up Gesture Recognizer...")
+print("Setting up Gesture Recognizer...")
 try:
     MODEL_PATH = os.path.expanduser(
         "~/Documents/emulator/gesture_recognizer.task"
     )
     if not os.path.exists(MODEL_PATH):
-        print(f"❌ Model not found at {MODEL_PATH}")
+        print(f"Model not found at {MODEL_PATH}")
         sys.exit(1)
-    print(f"✅ Model found: {MODEL_PATH}")
+    print(f"Model found: {MODEL_PATH}")
 
     BaseOptions              = mp.tasks.BaseOptions
     GestureRecognizer        = mp.tasks.vision.GestureRecognizer
@@ -46,9 +46,9 @@ try:
         running_mode=VisionRunningMode.IMAGE,
         num_hands=1
     )
-    print("✅ Gesture recognizer options ready")
+    print("Gesture recognizer options ready")
 except Exception as e:
-    print(f"❌ Gesture recognizer setup failed: {e}")
+    print(f"Gesture recognizer setup failed: {e}")
     traceback.print_exc()
     sys.exit(1)
 
@@ -176,11 +176,11 @@ def draw_side_panel(canvas, x0, gesture, source, conf, fps, hand_seen):
                     cv2.FONT_HERSHEY_SIMPLEX, 0.58, (100, 220, 255), 2)
 
 # ── Open webcam ──────────────────────────────────────
-print("🔵 Opening webcam...")
+print("Opening webcam...")
 WINDOW_NAME = "Mario Gesture Controller"
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    print("❌ Webcam not found!")
+    print("Webcam not found!")
     sys.exit(1)
 
 # Request a smaller capture size to reduce CPU load and latency.
@@ -194,10 +194,10 @@ actual_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 # Use a resizable window and start with a larger preview.
 cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
 cv2.resizeWindow(WINDOW_NAME, DISPLAY_SIDE + PANEL_WIDTH, DISPLAY_SIDE)
-print("✅ Webcam open")
-print(f"📷 Camera resolution: {actual_w}x{actual_h}")
+print("Webcam open")
+print(f"Camera resolution: {actual_w}x{actual_h}")
 
-print("\n🎮 Mario Gesture Controller READY")
+print("\nMario Gesture Controller READY")
 print("="*40)
 print("Pointing_Up = Move right")
 print("Victory = Run right")
@@ -221,12 +221,12 @@ PROCESS_SCALE    = 0.50
 
 try:
     with GestureRecognizer.create_from_options(options) as recognizer:
-        print("✅ Recognizer active — running main loop...")
+        print("Recognizer active — running main loop...")
         while True:
             service_key_releases()
             ret, frame = cap.read()
             if not ret:
-                print("❌ Frame grab failed")
+                print("Frame grab failed")
                 break
 
             frame = cv2.flip(frame, 1)
@@ -302,7 +302,7 @@ try:
                 break
 
 except Exception as e:
-    print(f"\n Error in main loop: {e}")
+    print(f"\nError in main loop: {e}")
     traceback.print_exc()
 
 finally:
